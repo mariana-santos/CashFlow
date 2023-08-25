@@ -46,7 +46,7 @@ public class TipoCreditoController {
     @GetMapping("/tiposCredito/{id}")
     public ResponseEntity<TipoCredito> show(@PathVariable Long id){
 
-        log.info("Mostrar categoria com id "+ id);
+        log.info("Mostrar tipo de crédito com id "+ id);
 
         var tipoEncontrado = tiposCredito
                                 .stream()
@@ -63,7 +63,7 @@ public class TipoCreditoController {
     @DeleteMapping("/tiposCredito/{id}")
     public ResponseEntity<Object> destroy(@PathVariable Long id){
 
-        log.info("Deletando categoria com id "+ id);
+        log.info("Deletando tipo de crédito com id "+ id);
 
         var tipoEncontrado = tiposCredito
                                 .stream()
