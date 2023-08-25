@@ -1,6 +1,7 @@
 package br.com.fiap.CashFlow.model;
 
 public class TipoCredito {
+    private Long id;
     private String nome;
     private float taxaJuros;
     private int limiteMeses;
@@ -13,6 +14,14 @@ public class TipoCredito {
         this.taxaJuros = taxaJuros;
         this.limiteMeses = limiteMeses;
         this.rendaNecessaria = rendaNecessaria;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNome() {
