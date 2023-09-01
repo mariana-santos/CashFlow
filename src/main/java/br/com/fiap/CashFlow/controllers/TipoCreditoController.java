@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.CashFlow.model.TipoCredito;
+import br.com.fiap.CashFlow.repository.TipoCreditoRepository;
 
 @RestController
 public class TipoCreditoController {
@@ -25,20 +25,20 @@ public class TipoCreditoController {
     Logger log = LoggerFactory.getLogger(getClass());
 
     List<TipoCredito> tiposCredito = new ArrayList<>();
-    
+
+    @Autowired
+    TipoCreditoRepository repository;
+
     @GetMapping("/tiposCredito")
     public List<TipoCredito> index(){
-        return tiposCredito;
+        return repository.findAll();
     }
 
     @PostMapping("/tiposCredito")
     public ResponseEntity<TipoCredito> create(@RequestBody TipoCredito tipoCredito){
 
         log.info("Cadastrando tipo de credito " + tipoCredito);
-        tipoCredito.setId(tiposCredito.size() + 1L);
-
-        tiposCredito.add(tipoCredito);
-
+        repository.save(tipoCredito);
         return ResponseEntity.status(HttpStatus.CREATED).body(tipoCredito);
 
     }
@@ -47,16 +47,7 @@ public class TipoCreditoController {
     public ResponseEntity<TipoCredito> show(@PathVariable Long id){
 
         log.info("Mostrar tipo de crédito com id "+ id);
-
-        var tipoEncontrado = tiposCredito
-                                .stream()
-                                .filter( (tipoCredito) -> tipoCredito.getId().equals(id))
-                                .findFirst();
-
-        if(tipoEncontrado.isEmpty())
-            return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(tipoEncontrado.get());
+        return ResponseEntity.ok(getTipoCreditoById(id));
 
     }
 
@@ -65,16 +56,9 @@ public class TipoCreditoController {
 
         log.info("Deletando tipo de crédito com id "+ id);
 
-        var tipoEncontrado = tiposCredito
-                                .stream()
-                                .filter( (tipoCredito) -> tipoCredito.getId().equals(id))
-                                .findFirst();
+        getTipoCreditoById(id);
 
-        if(tipoEncontrado.isEmpty())
-            return ResponseEntity.notFound().build();
-
-        tiposCredito.remove(tipoEncontrado.get());
-
+        repository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -83,19 +67,18 @@ public class TipoCreditoController {
 
         log.info("Atualizando dados do tipo de crédito com id " + id);
 
-        var tipoEncontrado = tiposCredito
-                                .stream()
-                                .filter( (tc) -> tc.getId().equals(id))
-                                .findFirst();
+        getTipoCreditoById(id);
 
-        if(tipoEncontrado.isEmpty())
-            return ResponseEntity.notFound().build();
-
-        tiposCredito.remove(tipoEncontrado.get());
         tipoCredito.setId(id);
-        tiposCredito.add(tipoCredito);
+        repository.save(tipoCredito);
 
         return ResponseEntity.ok(tipoCredito);
 
+    }
+
+    private TipoCredito getTipoCreditoById(Long id){
+        return repository.findById(id).orElseThrow(() -> {
+            return new RuntimeException(); 
+        });
     }
 }
