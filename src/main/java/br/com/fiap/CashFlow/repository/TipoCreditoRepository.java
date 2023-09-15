@@ -8,5 +8,5 @@ import br.com.fiap.CashFlow.model.TipoCredito;
 
 public interface TipoCreditoRepository extends JpaRepository<TipoCredito, Long> {
     List<TipoCredito> findByNome(String nome);
-    List<TipoCredito> findByNomeStartWith(String letra);
+    List<TipoCredito> findByNomeStartsWith(String letra);
 }

@@ -13,8 +13,8 @@ public class RendaController {
     @GetMapping("/renda")
     public Renda index(){
 
-        Usuario usuario = new Usuario(1, null, "João de Lima", "joao@email.com", "(11) 9 9999-9999", "999.999.999-99", new Date(), "99999-999", "Av. Paulista", "São Paulo", "1100", "SP", 0);
+        // Usuario usuario = new Usuario(1, null, "João de Lima", "joao@email.com", "(11) 9 9999-9999", "999.999.999-99", new Date(), "99999-999", "Av. Paulista", "São Paulo", "1100", "SP", 0);
 
-        return new Renda(1, "Salário", 0, usuario);
+        return new Renda(1, "Salário", 0, null);
     }
 }

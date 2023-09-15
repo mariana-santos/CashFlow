@@ -2,142 +2,57 @@ package br.com.fiap.CashFlow.model;
 
 import java.util.Date;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 public class Usuario {
+
+	@Id @GeneratedValue
     private int id;
-    private String imagem;
-    private String nome;
-    private String email;
-    private String telefone;
-    private String cpf;
-    private Date dataNascimento;
-    private String cep;
-    private String logradouro;
-    private String localidade;
-    private String numero;
-    private String uf;
-    private float valor_divida;
-
-    	public Usuario() {
-	}
-
-	public Usuario(int id, String imagem, String nome, String email, String telefone, String cpf, 
-                        Date dataNascimento, String cep, String logradouro, String localidade, String numero, String uf, float valor_divida) {
-		this.id = id;
-		this.imagem = imagem;
-		this.nome = nome;
-		this.email = email;
-		this.telefone = telefone;
-		this.cpf = cpf;
-		this.dataNascimento = dataNascimento;
-		this.cep = cep;
-		this.logradouro = logradouro;
-		this.localidade = localidade;
-		this.numero = numero;
-		this.uf = uf;
-		this.valor_divida = valor_divida;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getImagem() {
-		return imagem;
-	}
-    	public void setImagem(String imagem) {
-		this.imagem = imagem;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getTelefone() {
-		return telefone;
-	}
-
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
-	}
-
-	public String getCpf() {
-		return cpf;
-	}
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-
-	public Date getDataNascimento() {
-		return dataNascimento;
-	}
-
-	public void setDataNascimento(Date dataNascimento) {
-		this.dataNascimento = dataNascimento;
-	}
-
-	public String getCep() {
-		return cep;
-	}
-
-	public void setCep(String cep) {
-		this.cep = cep;
-	}
-
-	public String getLogradouro() {
-		return logradouro;
-	}
-
-	public void setLogradouro(String logradouro) {
-		this.logradouro = logradouro;
-	}
-
-	public String getNumero() {
-		return numero;
-	}
-
-	public void setNumero(String numero) {
-		this.numero = numero;
-	}
-
-    public String getLocalidade() {
-		return localidade;
-	}
-
-	public void setLocalidade(String localidade) {
-		this.localidade = localidade;
-	}
-
-	public String getUF() {
-		return uf;
-	}
-
-	public void setUF(String uf) {
-		this.uf = uf;
-	}
-
-    public float getValorDivida() {
-        return valor_divida;
-    }
-
-    public void setValorDivida(float valor_divida){
-        this.valor_divida = valor_divida;
-    }
 	
+    private String imagem;
+
+    @NotBlank @Size(min = 7)
+    private String nome;
+
+    @NotBlank @Size(min = 7, message = "Nome precisa ter no mínimo 7 caracteres!")
+    private String email;
+
+    private String telefone;
+
+    @NotBlank @Size(min = 11)
+    private String cpf;
+
+    @Past(message = "Data de nascimento inválida!")
+    private Date dataNascimento;
+
+    @NotBlank @Size(min = 8)
+    private String cep;
+
+    @NotBlank
+    private String logradouro;
+
+    @NotBlank
+    private String localidade;
+
+    @NotBlank
+    private String numero;
+
+    @NotBlank
+    private String uf;
+
+    @Min(value = 0, message = "Valor não pode ser negativo!")
+    private float valor_divida;
 }
