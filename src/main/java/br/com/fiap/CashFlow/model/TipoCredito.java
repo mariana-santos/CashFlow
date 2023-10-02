@@ -1,73 +1,37 @@
 package br.com.fiap.CashFlow.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TipoCredito {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_tipo_credito")
     private Long id;
+
+    @NotBlank
     private String nome;
+
+    @Positive
     private float taxaJuros;
+
+    @Positive
     private int limiteMeses;
+
+    @Positive
     private float rendaNecessaria;
 
-    public TipoCredito(){ }
-
-    public TipoCredito(String nome, float taxaJuros, int limiteMeses, float rendaNecessaria) {
-        this.nome = nome;
-        this.taxaJuros = taxaJuros;
-        this.limiteMeses = limiteMeses;
-        this.rendaNecessaria = rendaNecessaria;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public float getTaxaJuros() {
-        return taxaJuros;
-    }
-
-    public void setTaxaJuros(float taxaJuros) {
-        this.taxaJuros = taxaJuros;
-    }
-
-    public int getlimiteMeses() {
-        return limiteMeses;
-    }
-
-    public void setLimiteMeses(int limiteMeses) {
-        this.limiteMeses = limiteMeses;
-    }
-
-    public float getRendaNecessaria() {
-        return rendaNecessaria;
-    }
-
-    public void setRendaNecessaria(float rendaNecessaria) {
-        this.rendaNecessaria = rendaNecessaria;
-    }
-
-    @Override
-    public String toString() {
-        return "TipoCredito [nome=" + nome + ", taxaJuros=" + taxaJuros + ", limiteMeses=" + limiteMeses
-                + ", rendaNecessaria=" + rendaNecessaria + "]";
-    }
 }

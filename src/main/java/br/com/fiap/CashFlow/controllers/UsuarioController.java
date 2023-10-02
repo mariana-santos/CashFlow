@@ -37,6 +37,5 @@ public class UsuarioController {
         log.info("Cadastrando usuário " + usuario);
         repository.save(usuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
-    }
-    
+    }   
 }

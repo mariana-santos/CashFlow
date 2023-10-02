@@ -2,9 +2,13 @@ package br.com.fiap.CashFlow.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
@@ -20,14 +24,15 @@ import lombok.NoArgsConstructor;
 public class Usuario {
 
 	@Id @GeneratedValue
-    private int id;
+    @Column(name = "id_usuario")
+    private Long id;
 	
     private String imagem;
 
-    @NotBlank @Size(min = 7)
+    @NotBlank @Size(min = 7, message = "Nome precisa ter no mínimo 7 caracteres!")
     private String nome;
 
-    @NotBlank @Size(min = 7, message = "Nome precisa ter no mínimo 7 caracteres!")
+    @Email @NotBlank @Size(min = 7, message = "Email precisa ter no mínimo 7 caracteres!")
     private String email;
 
     private String telefone;
@@ -36,6 +41,7 @@ public class Usuario {
     private String cpf;
 
     @Past(message = "Data de nascimento inválida!")
+    @JsonFormat(pattern = "DD/MM/YYYY")
     private Date dataNascimento;
 
     @NotBlank @Size(min = 8)
@@ -54,5 +60,5 @@ public class Usuario {
     private String uf;
 
     @Min(value = 0, message = "Valor não pode ser negativo!")
-    private float valor_divida;
+    private float valorDivida;
 }

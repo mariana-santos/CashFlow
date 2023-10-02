@@ -12,15 +12,15 @@ import br.com.fiap.CashFlow.model.Usuario;
 
 @RestController
 public class PagamentoController {
-    @GetMapping("/pagamento")
-    public Pagamento index(){
+    // @GetMapping("/pagamento")
+    // public Pagamento index(){
 
-        // Usuario usuario = new Usuario(1, null, "João de Lima", "joao@email.com", "(11) 9 9999-9999", "999.999.999-99", new Date(), "99999-999", "Av. Paulista", "São Paulo", "1100", "SP", 0);
+    //     // Usuario usuario = new Usuario(1, null, "João de Lima", "joao@email.com", "(11) 9 9999-9999", "999.999.999-99", new Date(), "99999-999", "Av. Paulista", "São Paulo", "1100", "SP", 0);
 
-        TipoCredito tipoCredito = new TipoCredito("Empréstimo Pessoal", 3, 30, 12000);
+    //     TipoCredito tipoCredito = new TipoCredito("Empréstimo Pessoal", 3, 30, 12000);
 
-        Emprestimo emprestimo = new Emprestimo(1, null, tipoCredito, 2000, 5, 12, 175, 2100);
+    //     Emprestimo emprestimo = new Emprestimo(1, null, tipoCredito, 2000, 5, 12, 175, 2100);
         
-        return new Pagamento(1, emprestimo, new Date(), 550);
-    }
+    //     return new Pagamento(1, emprestimo, new Date(), 550);
+    // }
 }

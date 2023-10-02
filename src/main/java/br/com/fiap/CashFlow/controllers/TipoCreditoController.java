@@ -24,8 +24,6 @@ public class TipoCreditoController {
 
     Logger log = LoggerFactory.getLogger(getClass());
 
-    List<TipoCredito> tiposCredito = new ArrayList<>();
-
     @Autowired
     TipoCreditoRepository repository;
 
