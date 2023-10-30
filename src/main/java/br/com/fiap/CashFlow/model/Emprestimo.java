@@ -1,57 +1,64 @@
 package br.com.fiap.CashFlow.model;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Emprestimo {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_emprestimo", nullable = false)
+    private Long id;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(
+            name = "id_usuario",
+            referencedColumnName = "id_usuario"
+    )
     private Usuario usuario;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(
+            name = "id_tipo_credito",
+            referencedColumnName = "id_tipo_credito"
+    )
     private TipoCredito tipoCredito;
+
+    @Positive(message = "Valor de empréstimo deve ser positivo!")
+    @Column(name = "valor_contratado", nullable = false)
     private float valorContratado;
+
+    @Positive
+    @Column(name = "taxa_juros", nullable = false)
     private float taxaJuros;
-    private int numeroParcelas;
+
+    @Positive
+    @Column(name = "nm_parcelas", nullable = false)
+    private Long numeroParcelas;
+
+    @Positive
+    @Column(name = "valor_parcela", nullable = false)
     private float valorParcela;
+
+    @Positive
+    @Column(name = "valor_total", nullable = false)
     private float valorTotal;
-
-    public Emprestimo(int id, Usuario usuario, TipoCredito tipoCredito,
-                      float valorContratado, float taxaJuros,
-                      int numeroParcelas, float valorParcela, float valorTotal) {
-        this.id = id;
-        this.usuario = usuario;
-        this.tipoCredito = tipoCredito;
-        this.valorContratado = valorContratado;
-        this.taxaJuros = taxaJuros;
-        this.numeroParcelas = numeroParcelas;
-        this.valorParcela = valorParcela;
-        this.valorTotal = valorTotal;
-    }
-
-    public int getIdEmprestimo() {
-        return id;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public TipoCredito getTipoCredito() {
-        return tipoCredito;
-    }
-
-    public float getValorContratado() {
-        return valorContratado;
-    }
-
-    public float getTaxaJuros() {
-        return taxaJuros;
-    }
-
-    public int getNumeroParcelas() {
-        return numeroParcelas;
-    }
-
-    public float getValorParcela() {
-        return valorParcela;
-    }
-
-    public float getValorTotal() {
-        return valorTotal;
-    }
 }

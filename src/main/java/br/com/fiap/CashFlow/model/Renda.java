@@ -1,50 +1,41 @@
 package br.com.fiap.CashFlow.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Renda {
-    private int id;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_renda", nullable = false)
+    private Long id;
+
+	@NotNull
+    @NotBlank
+    @Column(name = "fonte_renda", nullable = false)
     private String fonte;
+
+	@Positive
+    @Column(name = "valor_renda", nullable = false)
     private float valor;
+
+	@NotNull
+	@OneToOne
+	@JoinColumn(name = "id_usuario")
     private Usuario usuario;
-
-    public Renda() {
-	}
-
-	public Renda(int id, String fonte, float valor, Usuario usuario) {
-		this.id = id;
-		this.fonte = fonte;
-		this.valor = valor;
-		this.usuario = usuario;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getFonte() {
-		return fonte;
-	}
-
-	public void setFonte(String fonte) {
-		this.fonte = fonte;
-	}
-
-	public float getValor() {
-        return valor;
-	}
-
-	public void getValor(float valor){
-        this.valor = valor;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
 }
