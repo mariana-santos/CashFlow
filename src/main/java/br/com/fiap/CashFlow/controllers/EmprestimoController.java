@@ -70,4 +70,46 @@ public class EmprestimoController {
         return emprestimoRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Emprestimo não encontrado com o ID: " + id));
     }
+
+    @PostMapping("/emprestimo")
+    public ResponseEntity<Emprestimo> create(@RequestBody @Valid Emprestimo emp){
+
+        log.info("Cadastrando empréstimo " + emp);
+        emprestimoRepository.save(emp);
+        return ResponseEntity.status(HttpStatus.CREATED).body(emp);
+
+    }
+
+    @GetMapping("/emprestimo/{id}")
+    public ResponseEntity<Emprestimo> show(@PathVariable Long id){
+
+        log.info("Mostrar empréstimo com id "+ id);
+        return ResponseEntity.ok(getEmprestimoById(id));
+
+    }
+
+    @DeleteMapping("/emprestimo/{id}")
+    public ResponseEntity<Object> destroy(@PathVariable Long id){
+
+        log.info("Deletando empréstimo com id "+ id);
+
+        getEmprestimoById(id);
+
+        emprestimoRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/emprestimo/{id}")
+    public ResponseEntity<Emprestimo> update(@PathVariable Long id, @RequestBody @Valid Emprestimo emprestimo){
+
+        log.info("Atualizando dados do empréstimo com id " + id);
+
+        getEmprestimoById(id);
+
+        emprestimo.setId(id);
+        emprestimoRepository.save(emprestimo);
+
+        return ResponseEntity.ok(emprestimo);
+
+    }
 }

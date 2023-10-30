@@ -70,4 +70,11 @@ public class UsuarioController {
         return usuarioRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario não encontrado com o ID: " + id));
     }
+
+    @PostMapping("/usuario")
+    public ResponseEntity<Object> create(@RequestBody @Valid Usuario usuario) {
+        log.info("Cadastrando usuário " + usuario);
+        usuarioRepository.save(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
+    }   
 }
