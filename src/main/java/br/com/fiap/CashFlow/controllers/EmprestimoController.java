@@ -2,82 +2,90 @@ package br.com.fiap.CashFlow.controllers;
 
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import jakarta.validation.Valid;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.CashFlow.model.Emprestimo;
-import br.com.fiap.CashFlow.model.TipoCredito;
+import br.com.fiap.CashFlow.model.Parcela;
 import br.com.fiap.CashFlow.repository.EmprestimoRepository;
-import jakarta.validation.Valid;
 
 @RestController
+@RequestMapping("emprestimos")
+@Slf4j
 public class EmprestimoController {
 
-    Logger log = LoggerFactory.getLogger(getClass());
-
     @Autowired
-    EmprestimoRepository repository;
+    EmprestimoRepository emprestimoRepository;
 
-    @GetMapping("/emprestimo")
-    public List<Emprestimo> index(){
-        return repository.findAll();
+    @GetMapping
+    public List<Emprestimo> listAll() {
+        try {
+            log.info("Buscando Todos os Emprestimos");
+            return emprestimoRepository.findAll();
+        } catch (Exception e) {
+            log.error("Erro ao buscar empréstimos", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao buscar empréstimos", e);
+        }
     }
 
-    @PostMapping("/emprestimo")
-    public ResponseEntity<Emprestimo> create(@RequestBody @Valid Emprestimo emp){
-
-        log.info("Cadastrando empréstimo " + emp);
-        repository.save(emp);
-        return ResponseEntity.status(HttpStatus.CREATED).body(emp);
-
-    }
-
-    @GetMapping("/emprestimo/{id}")
-    public ResponseEntity<Emprestimo> show(@PathVariable Long id){
-
-        log.info("Mostrar empréstimo com id "+ id);
+    @GetMapping("{id}")
+    public ResponseEntity<Emprestimo> readEmprestimo(@PathVariable Long id) {
+        log.info("Exibindo o Emprestimo de ID: " + id);
         return ResponseEntity.ok(getEmprestimoById(id));
-
     }
 
-    @DeleteMapping("/emprestimo/{id}")
-    public ResponseEntity<Object> destroy(@PathVariable Long id){
+    @PostMapping
+    public ResponseEntity<Emprestimo> createEmprestimo(@RequestBody @Valid Emprestimo novo_emprestimo) {
+        Emprestimo emprestimoSalvo = emprestimoRepository.save(novo_emprestimo);
 
-        log.info("Deletando empréstimo com id "+ id);
+        List<Parcela> parcelas = emprestimoSalvo.getParcelas();
 
+        if (parcelas != null) {
+            for (Parcela parcela : parcelas) {
+                Emprestimo copiaEmprestimo = emprestimoSalvo;
+                copiaEmprestimo.setParcelas(null);
+                parcela.setEmprestimo(copiaEmprestimo);
+            }
+        }
+
+        emprestimoRepository.save(emprestimoSalvo);
+        log.info("Cadastrando Emprestimo: " + novo_emprestimo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novo_emprestimo);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Emprestimo> updateEmprestimo(@PathVariable @Valid Long id,
+            @RequestBody Emprestimo emprestimo_atualizar) {
+        log.info("Atualizando o Emprestimo de ID: " + id);
         getEmprestimoById(id);
+        emprestimo_atualizar.setId(id);
+        emprestimoRepository.save(emprestimo_atualizar);
+        return ResponseEntity.ok(emprestimo_atualizar);
+    }
 
-        repository.deleteById(id);
+    @DeleteMapping("{id}")
+    public ResponseEntity<Emprestimo> deleteEmprestimo(@PathVariable Long id) {
+        log.info("Deletando o Emprestimo de ID: " + id);
+        emprestimoRepository.delete(getEmprestimoById(id));
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/emprestimo/{id}")
-    public ResponseEntity<Emprestimo> update(@PathVariable Long id, @RequestBody @Valid Emprestimo emprestimo){
-
-        log.info("Atualizando dados do empréstimo com id " + id);
-
-        getEmprestimoById(id);
-
-        emprestimo.setId(id);
-        repository.save(emprestimo);
-
-        return ResponseEntity.ok(emprestimo);
-
+    private Emprestimo getEmprestimoById(Long id) {
+        return emprestimoRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Emprestimo não encontrado com o ID: " + id));
     }
-
-    private Emprestimo getEmprestimoById(Long id){
-        return repository.findById(id).orElseThrow(() -> { 
-             return new RuntimeException();
-         });
-     }
 }

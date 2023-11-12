@@ -1,82 +1,73 @@
 package br.com.fiap.CashFlow.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import jakarta.validation.Valid;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.CashFlow.model.TipoCredito;
 import br.com.fiap.CashFlow.repository.TipoCreditoRepository;
 
 @RestController
+@RequestMapping("tipoCreditos")
+@Slf4j
 public class TipoCreditoController {
 
-    Logger log = LoggerFactory.getLogger(getClass());
-
     @Autowired
-    TipoCreditoRepository repository;
+    TipoCreditoRepository tipoCreditoRepository;
 
-    @GetMapping("/tiposCredito")
-    public List<TipoCredito> index(){
-        return repository.findAll();
+    @GetMapping
+    public List<TipoCredito> listAll() {
+        log.info("Buscando Todos os TipoCreditos");
+        return tipoCreditoRepository.findAll();
     }
 
-    @PostMapping("/tiposCredito")
-    public ResponseEntity<TipoCredito> create(@RequestBody TipoCredito tipoCredito){
-
-        log.info("Cadastrando tipo de credito " + tipoCredito);
-        repository.save(tipoCredito);
-        return ResponseEntity.status(HttpStatus.CREATED).body(tipoCredito);
-
-    }
-
-    @GetMapping("/tiposCredito/{id}")
-    public ResponseEntity<TipoCredito> show(@PathVariable Long id){
-
-        log.info("Mostrar tipo de crédito com id "+ id);
+    @GetMapping("{id}")
+    public ResponseEntity<TipoCredito> readTipoCredito(@PathVariable Long id) {
+        log.info("Exibindo o TipoCredito de ID: " + id);
         return ResponseEntity.ok(getTipoCreditoById(id));
-
     }
 
-    @DeleteMapping("/tiposCredito/{id}")
-    public ResponseEntity<Object> destroy(@PathVariable Long id){
+    @PostMapping
+    public ResponseEntity<TipoCredito> createTipoCredito(@RequestBody @Valid TipoCredito novo_tipoCredito) {
+        log.info("Cadastrando TipoCredito: " + novo_tipoCredito);
+        tipoCreditoRepository.save(novo_tipoCredito);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novo_tipoCredito);
+    }
 
-        log.info("Deletando tipo de crédito com id "+ id);
-
+    @PutMapping("{id}")
+    public ResponseEntity<TipoCredito> updateTipoCredito(@PathVariable @Valid Long id,
+            @RequestBody TipoCredito tipoCredito_atualizar) {
+        log.info("Atualizando o TipoCredito de ID: " + id);
         getTipoCreditoById(id);
+        tipoCredito_atualizar.setId(id);
+        tipoCreditoRepository.save(tipoCredito_atualizar);
+        return ResponseEntity.ok(tipoCredito_atualizar);
+    }
 
-        repository.deleteById(id);
+    @DeleteMapping("{id}")
+    public ResponseEntity<TipoCredito> deleteTipoCredito(@PathVariable Long id) {
+        log.info("Deletando o TipoCredito de ID: " + id);
+        tipoCreditoRepository.delete(getTipoCreditoById(id));
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/tiposCredito/{id}")
-    public ResponseEntity<TipoCredito> update(@PathVariable Long id, @RequestBody TipoCredito tipoCredito){
-
-        log.info("Atualizando dados do tipo de crédito com id " + id);
-
-        getTipoCreditoById(id);
-
-        tipoCredito.setId(id);
-        repository.save(tipoCredito);
-
-        return ResponseEntity.ok(tipoCredito);
-
-    }
-
-    private TipoCredito getTipoCreditoById(Long id){
-        return repository.findById(id).orElseThrow(() -> {
-            return new RuntimeException(); 
-        });
+    private TipoCredito getTipoCreditoById(Long id) {
+        return tipoCreditoRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "TipoCredito não encontrado com o ID: " + id));
     }
 }

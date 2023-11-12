@@ -2,68 +2,57 @@ package br.com.fiap.CashFlow.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Parcela {
-    private int id;
-    private int numero;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_parcela", nullable = false)
+    private Long id;
+
+    @NotNull
+    @Positive
+    @Column(name = "num_parcela", nullable = false)
+    private Long numero;
+
+    @NotNull
+    @FutureOrPresent
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    @Column(name = "dt_vencimento", nullable = false)
     private Date dataVencimento;
+
+    @Positive
+    @Column(name = "valor_parcela", nullable = false)
     private float valor;
+
+    @NotNull
+    @NotBlank
+    @Column(name = "status_pagamento", nullable = false)
     private String statusPagamento;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "id_emprestimo", referencedColumnName = "id_emprestimo")
     private Emprestimo emprestimo;
-
-    public Parcela(int id, int numero, Date dataVencimento, float valor, String statusPagamento, Emprestimo emprestimo) {
-        this.id = id;
-        this.numero = numero;
-        this.dataVencimento = dataVencimento;
-        this.valor = valor;
-        this.statusPagamento = statusPagamento;
-        this.emprestimo = emprestimo;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getNumero() {
-        return numero;
-    }
-
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
-
-    public Date getDataVencimento() {
-        return dataVencimento;
-    }
-
-    public void setDataVencimento(Date dataVencimento) {
-        this.dataVencimento = dataVencimento;
-    }
-
-    public float getValor() {
-        return valor;
-    }
-
-    public void setValor(float valor) {
-        this.valor = valor;
-    }
-
-    public String getStatusPagamento() {
-        return statusPagamento;
-    }
-
-    public void setStatusPagamento(String statusPagamento) {
-        this.statusPagamento = statusPagamento;
-    }
-
-    public Emprestimo getEmprestimo() {
-        return emprestimo;
-    }
-
-    public void setEmprestimo(Emprestimo emprestimo) {
-        this.emprestimo = emprestimo;
-    }
 }
