@@ -1,6 +1,5 @@
 package br.com.fiap.CashFlow.controllers;
 
-<<<<<<< HEAD
 import java.util.List;
 
 import jakarta.validation.Valid;
@@ -8,17 +7,6 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-=======
-import jakarta.validation.Valid;
-
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.data.domain.Page;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.RequestParam;
->>>>>>> 9f1c0bd1921c02396e0ee2d6e055f32268e66ec9
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,17 +31,9 @@ public class ParcelaController {
     ParcelaRepository parcelaRepository;
 
     @GetMapping
-<<<<<<< HEAD
     public List<Parcela> listAll() {
         log.info("Buscando Todas as Parcelas");
         return parcelaRepository.findAll();
-=======
-    public Page<Parcela> listAll(
-        @PageableDefault(size = 5, sort = "numero") Pageable pageRequest, 
-        @RequestParam(required = false) String status_pagamento) {
-        log.info("Buscando Todas as Parcelas");
-        return parcelaRepository.findByStatusPagamentoContainingIgnoreCase(status_pagamento, pageRequest);
->>>>>>> 9f1c0bd1921c02396e0ee2d6e055f32268e66ec9
     }
 
     @GetMapping("{id}")
@@ -86,7 +66,6 @@ public class ParcelaController {
         return ResponseEntity.noContent().build();
     }
 
-<<<<<<< HEAD
     @PostMapping("/batch")
     public ResponseEntity<List<Parcela>> createParcelas(@RequestBody @Valid List<Parcela> parcelas) {
         log.info("Cadastrando um lote de parcelas: " + parcelas);
@@ -96,8 +75,6 @@ public class ParcelaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(parcelasSalvas);
     }
 
-=======
->>>>>>> 9f1c0bd1921c02396e0ee2d6e055f32268e66ec9
     private Parcela getParcelaById(Long id) {
         return parcelaRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Parcela não encontrada com o ID: " + id));
