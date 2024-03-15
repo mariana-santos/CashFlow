@@ -9,19 +9,21 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 public class SecurityConfig {
 
 	@Autowired
-	AuthenticationFilter authenticationFilter;
+	AuthFilter authenticationFilter;
 
 	@Bean
 	SecurityFilterChain web(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests((authorize) -> authorize
-				.requestMatchers("/login", "/usuario").permitAll()
+				.requestMatchers(new MvcRequestMatcher
+					(new HandlerMappingIntrospector(), "/login/")).permitAll()
 				.anyRequest().authenticated())
 				.csrf(csrf -> csrf.disable())
 				.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
