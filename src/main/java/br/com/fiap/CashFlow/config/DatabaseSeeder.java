@@ -33,7 +33,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         TipoCredito tipoCredito = new TipoCredito(null, "Credito Pessoal", 10f, 12L, 1000.0f);
         tipoCreditoRepository.save(tipoCredito);
 
-        Usuario usuario = new Usuario(null, null, "Mariana Santos", "mariana@gmail.com", "707070", "000.000.000-00", new Date(), "00000000", "rua exemplo", "São Paulo", "123", "SP", 700.0f);
+        Usuario usuario = new Usuario(null, null, "Mariana Santos", "mariana@gmail.com", "123", "707070", "000.000.000-00", new Date(), "00000000", "rua exemplo", "São Paulo", "123", "SP", 700.0f);
         
         usuarioRepository.save(usuario);        
 

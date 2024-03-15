@@ -2,6 +2,9 @@ package br.com.fiap.CashFlow.model;
 
 import java.util.Date;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
@@ -108,5 +111,9 @@ public class Usuario {
 
     public boolean isEnabled() {
         return true;
+    }
+
+    public Authentication toAuthentication() {
+        return new UsernamePasswordAuthenticationToken(email, null);
     }
 }
