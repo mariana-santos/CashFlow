@@ -11,9 +11,7 @@ import java.util.List;
 
 import br.com.fiap.CashFlow.model.*;
 import br.com.fiap.CashFlow.repository.*;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Configuration
 public class DatabaseSeeder implements CommandLineRunner {
 

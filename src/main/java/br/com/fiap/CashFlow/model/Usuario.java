@@ -45,6 +45,11 @@ public class Usuario {
     private String email;
 
     @NotNull
+    @NotBlank @Size(min = 7, message = "Senha precisa ter no mínimo 7 caracteres!")
+    @Column(name = "senha_usuario", nullable = false)
+    private String senha;
+
+    @NotNull
     @NotBlank
     @Column(name = "tel_usuario", nullable = false)
     private String telefone;
@@ -88,4 +93,20 @@ public class Usuario {
     @Positive
     @Column(name = "divida_usuario", nullable = false)
     private float valorDivida;
+
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    public boolean isEnabled() {
+        return true;
+    }
 }
